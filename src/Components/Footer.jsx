@@ -67,6 +67,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom Section */}
+      <div className="w-full px-4 mt-40">
       <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-2 text-center sm:text-left  w-full">
         <p className="w-full sm:w-auto">
           &copy; CyberSociety MSIT'2025
@@ -75,6 +76,7 @@ const Footer = () => {
           Made by Priya Mahato
         </p>
       </div>
+    </div>
     </div>
   );
 };
