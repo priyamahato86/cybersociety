@@ -12,11 +12,33 @@ import Page2 from "./Components/Page2";
 import Page3 from "./Components/Page3";
 import Page4 from "./Components/Page4";
 import ContactPage from "./Components/ContactPage";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+function ScrollToSectionOnLoad() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const sectionId = location.state?.scrollTo;
+    if (location.pathname === "/" && sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: "smooth" });
+        }, 100); 
+      }
+    }
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   return (
     <>
       <Navigation />
+      <ScrollToSectionOnLoad />
+
       <Routes>
         {/* Main Page with Scrollable Sections */}
         <Route
