@@ -67,11 +67,11 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-center text-sm px-4 mt-40 w-full">
-        <p className="text-left w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-2 text-center sm:text-left  w-full">
+        <p className="w-full sm:w-auto">
           &copy; CyberSociety MSIT'2025
         </p>
-        <p className="text-right w-full sm:w-auto mt-2 sm:mt-0">
+        <p className="w-full sm:w-auto">
           Made by Priya Mahato
         </p>
       </div>
