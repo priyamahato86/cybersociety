@@ -43,19 +43,19 @@
 
 const Blog = () => {
   return (
-    <div className="min-h-screen  text-white px-4 md:px-10 py-10">
-      <h1 className="text-4xl font-bold mb-8">
+    <div className="min-h-screen text-white px-4 md:px-10 py-10">
+      <h1 className="text-4xl font-bold mb-10 text-green-300">
         Blogs <span className="text-2xl">📡</span>
       </h1>
 
-      <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.map((blog, index) => (
           <a
             key={index}
             href={blog.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="block bg-[#1a1a1a] p-6 rounded-xl hover:bg-[#2a2a2a] transition-shadow shadow-md hover:shadow-lg"
+            className="bg-[#1a1a1a] rounded-xl p-6 shadow-md hover:shadow-xl hover:bg-[#2a2a2a] transition-all duration-300 border border-gray-800 hover:border-green-400"
           >
             <h2 className="text-xl md:text-2xl font-semibold text-white mb-2">
               {blog.title}
@@ -72,4 +72,5 @@ const Blog = () => {
 };
 
 export default Blog;
+
 

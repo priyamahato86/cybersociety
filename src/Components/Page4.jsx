@@ -89,7 +89,7 @@ const ResourceSection = ({ title, resources }) => (
       {resources.map((resource, index) => (
         <div
           key={index}
-          className="border border-gray-700 p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300"
+          className="border border-gray-700 p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 hover:border-green-400"
         >
           <h3 className="text-2xl font-semibold mb-2">{resource.name}</h3>
           <p className="text-gray-300 mb-4">{resource.description}</p>
