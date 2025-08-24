@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
  const teamMembers = [
   {
     name: "Rahul Mishra",
-    image: "https://media.licdn.com/dms/image/v2/D5603AQHjR-cH4Bxypw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1720696347141?e=1756339200&v=beta&t=BRZsrn5R59K_GvFLQV6N5m4M-mHcojjipIGRAa_mkLc",
+    image: "https://media.licdn.com/dms/image/v2/D4E03AQFiYLXYEQrEkQ/profile-displayphoto-scale_400_400/B4EZhbyOLmHIAk-/0/1753886549510?e=1758758400&v=beta&t=quI8JPugZ0SMrG-8AnV3OpSTc0Ric08CkivaQSzg03U",
     github: "https://github.com/Cyber-Society-MSIT",
     linkedin: "https://www.linkedin.com/in/rivian96/",
     role: "Founder",
