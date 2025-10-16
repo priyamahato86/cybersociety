@@ -1,4 +1,6 @@
- const blogs = [
+import { BookOpen, CalendarDays, Clock, User } from "lucide-react";
+
+const blogs = [
   {
     title: "The Stack alignment problem",
     description:
@@ -43,34 +45,73 @@
 
 const Blog = () => {
   return (
-    <div className="min-h-screen text-white px-4 md:px-10 py-10">
-      <h1 className="text-4xl font-bold mb-10 text-green-300">
-        Blogs <span className="text-2xl">📡</span>
-      </h1>
+    <div className="min-h-screen bg-black text-white px-4 md:px-10 py-16">
+      {/* Header */}
+      <div className="text-center mb-12 px-2 overflow-visible">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-green-400 via-green-500 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(34,197,94,0.35)] leading-tight tracking-wide">
+          Cyber Blogs
+        </h1>
+        <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-2xl mx-auto px-3">
+          Dive deep into exploit analysis, malware reverse engineering, and the
+          art of hacking securely.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Blog Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {blogs.map((blog, index) => (
           <a
             key={index}
             href={blog.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#1a1a1a] rounded-xl p-6 shadow-md hover:shadow-xl hover:bg-[#2a2a2a] transition-all duration-300 border border-gray-800 hover:border-green-400"
+            className="group relative bg-gradient-to-b from-gray-900/70 to-black border border-gray-800 hover:border-green-500/60 rounded-2xl p-6 shadow-[0_0_10px_rgba(0,255,0,0.05)] hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] transition-all duration-300 overflow-hidden"
           >
-            <h2 className="text-xl md:text-2xl font-semibold text-white mb-2">
-              {blog.title}
-            </h2>
-            <p className="text-gray-400 mb-3 text-sm">{blog.description}</p>
-            <p className="text-gray-500 text-xs">
-              {blog.date} • {blog.readTime} • {blog.words} • {blog.author}
+            {/* Subtle Glow Overlay */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-green-500 blur-2xl transition-all duration-500"></div>
+
+            {/* Icon */}
+            <div className="flex items-center mb-4 space-x-3">
+              <BookOpen className="w-6 h-6 text-green-400" />
+              <h2 className="text-2xl font-semibold">{blog.title}</h2>
+            </div>
+
+            {/* Description */}
+            <p className="text-gray-400 mb-4 text-sm leading-relaxed">
+              {blog.description}
             </p>
+
+            {/* Blog Info */}
+            <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-auto">
+              <div className="flex items-center space-x-1">
+                <CalendarDays className="w-4 h-4 text-green-400" />
+                <span>{blog.date}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-4 h-4 text-green-400" />
+                <span>{blog.readTime}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <User className="w-4 h-4 text-green-400" />
+                <span>{blog.author}</span>
+              </div>
+            </div>
+
+            {/* Hover Arrow */}
+            <div className="absolute right-4 bottom-4 opacity-0 group-hover:opacity-100 text-green-400 transition-all duration-300">
+              <span className="text-sm font-semibold">Read →</span>
+            </div>
           </a>
         ))}
+      </div>
+
+      {/* Footer Quote */}
+      <div className="text-center mt-16 text-gray-500 text-sm italic">
+        “Stay curious. Stay ethical. Keep exploring the unseen layers of
+        cybersecurity.”
       </div>
     </div>
   );
 };
 
 export default Blog;
-
-
