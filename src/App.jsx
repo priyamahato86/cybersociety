@@ -6,6 +6,8 @@ import Footer from "./Components/Footer";
 import Blog from "./Components/Blog";
 import Members from "./Components/Members";
 import Navigation from "./Components/Navigation";
+import Login from "./Components/Login";
+import Signup from "./Components/Signup";
 import Events from "./Components/Events";
 import Page1 from "./Components/Page1";
 import Page2 from "./Components/Page2";
@@ -91,6 +93,9 @@ function App() {
 
         <Route path="/page3" element={<Page3 />} />
         <Route path="/page4" element={<Page4 />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
       </Routes>
     </>
   );
