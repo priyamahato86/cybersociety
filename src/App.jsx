@@ -1,21 +1,27 @@
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
+// App.jsx
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "./contexts/AuthContext";
+
+import Navigation from "./Components/Navigation";
 import Home from "./Components/Home";
 import Card from "./Components/Card";
+import Members from "./Components/Members";
 import Footer from "./Components/Footer";
 import Blog from "./Components/Blog";
-import Members from "./Components/Members";
-import Navigation from "./Components/Navigation";
-import Login from "./Components/Login";
-import Signup from "./Components/Signup";
 import Events from "./Components/Events";
+import ContactPage from "./Components/ContactPage";
 import Page1 from "./Components/Page1";
 import Page2 from "./Components/Page2";
 import Page3 from "./Components/Page3";
 import Page4 from "./Components/Page4";
-import ContactPage from "./Components/ContactPage";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import Login from "./Components/Login";
+import Signup from "./Components/Signup";
+import PhoneVerification from "./Components/PhoneVerification";
+import ChallengesPage from "./Components/ChallengesPage";
+import PrivateRoute from "./Components/PrivateRoute";
+
+import "./App.css";
 
 function ScrollToSectionOnLoad() {
   const location = useLocation();
@@ -27,7 +33,7 @@ function ScrollToSectionOnLoad() {
       if (section) {
         setTimeout(() => {
           section.scrollIntoView({ behavior: "smooth" });
-        }, 100); 
+        }, 100);
       }
     }
   }, [location]);
@@ -36,6 +42,8 @@ function ScrollToSectionOnLoad() {
 }
 
 function App() {
+  const { user, is2FAVerified } = useAuth();
+
   return (
     <>
       <Navigation />
@@ -47,55 +55,46 @@ function App() {
           path="/"
           element={
             <>
-              <div id="home">
-                <Home />
-              </div>
-              <div id="card">
-                <Card />
-              </div>
-              <div id="team">
-                <Members />
-              </div>
-              <div id="footer">
-                <Footer />
-              </div>
+              <div id="home"><Home /></div>
+              <div id="card"><Card /></div>
+              <div id="team"><Members /></div>
+              <div id="footer"><Footer /></div>
             </>
           }
         />
 
-        {/* Blog Page */}
-        <Route
-          path="/blogs"
-          element={
-            <>
-              <Blog />
-            </>
-          }
-        />
-        <Route
-          path="/events"
-          element={
-            <>
-              <Events />
-            </>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <>
-              <ContactPage />
-            </>
-          }
-        />
+        {/* Public Routes */}
+        <Route path="/blogs" element={<Blog />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/page1" element={<Page1 />} />
         <Route path="/page2" element={<Page2 />} />
-
         <Route path="/page3" element={<Page3 />} />
         <Route path="/page4" element={<Page4 />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
+        {/* Phone Verification Route */}
+        <Route
+          path="/verify-phone"
+          element={
+            user
+              ? !is2FAVerified
+                ? <PhoneVerification />
+                : <Navigate to="/challenges" replace />
+              : <Navigate to="/login" replace />
+          }
+        />
+
+        {/* Protected Challenges Route */}
+        <Route
+          path="/challenges"
+          element={
+            <PrivateRoute>
+              <ChallengesPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
