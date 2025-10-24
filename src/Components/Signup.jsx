@@ -1,124 +1,195 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+// src/Components/Signup.jsx
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { User, Mail, Lock, GraduationCap, Building, UserPlus } from "lucide-react";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    collegeName: "",
-    yearOfStudy: "",
-  });
-
-  const { register } = useAuth();
+  const { register, user, is2FAVerified } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Redirect after signup
+  useEffect(() => {
+    if (user && !is2FAVerified) navigate("/verify-phone");
+    else if (user && is2FAVerified) navigate("/challenges");
+  }, [user, is2FAVerified, navigate]);
+
+  // Email/password signup
+  const handleSignUp = async () => {
+    try {
+      setLoading(true);
+      await register(email, password);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Google signup (same as login)
+  const handleGoogleSignup = async () => {
     try {
-      await register(formData.email, formData.password);
-      navigate("/login");
-    } catch (error) {
-      alert(error.message);
+      setLoading(true);
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
-      <div className="bg-gray-900 rounded-2xl shadow-lg w-full max-w-md p-8 border border-green-400/30">
-        <h2 className="text-4xl font-bold text-center mb-4">
-          Join <span className="text-green-300">Cyber Society</span> 🕶️
-        </h2>
-        <p className="text-center text-gray-400 mb-8">
-          Create your account and start learning ethical hacking
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="relative">
-            <User className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
+    <div style={{
+      minHeight: "100vh",
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "1rem"
+    }}>
+      <div style={{ width: "100%", maxWidth: "28rem" }}>
+        <div style={{
+          background: "linear-gradient(to bottom right, #1f2937, #111827)",
+          borderRadius: "1rem",
+          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+          padding: "2rem",
+          border: "1px solid #374151"
+        }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+              <span style={{ color: "#fff" }}>Join the </span>
+              <span style={{ color: "#4ade80" }}>Cyber Society</span>
+            </h1>
+            <div style={{ display: "flex", justifyContent: "center", margin: "1rem 0" }}>
+              <span style={{ fontSize: "2.5rem" }}>👾</span>
+            </div>
+            <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>
+              Create an account to get started
+            </p>
           </div>
 
-          <div className="relative">
-            <Mail className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
+          {/* Email Input */}
+          <div style={{ marginBottom: "1rem" }}>
+            <div style={{ position: "relative" }}>
+              <span style={{
+                position: "absolute",
+                left: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#4ade80"
+              }}>✉️</span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "#1f2937",
+                  color: "#fff",
+                  border: "1px solid #4b5563",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 0.75rem 0.75rem 3rem",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#4ade80"}
+                onBlur={(e) => e.target.style.borderColor = "#4b5563"}
+              />
+            </div>
           </div>
 
-          <div className="relative">
-            <Lock className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
+          {/* Password Input */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ position: "relative" }}>
+              <span style={{
+                position: "absolute",
+                left: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#4ade80"
+              }}>🔒</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "#1f2937",
+                  color: "#fff",
+                  border: "1px solid #4b5563",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 0.75rem 0.75rem 3rem",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#4ade80"}
+                onBlur={(e) => e.target.style.borderColor = "#4b5563"}
+              />
+            </div>
           </div>
 
-          <div className="relative">
-            <Building className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="text"
-              name="collegeName"
-              placeholder="College Name"
-              value={formData.collegeName}
-              onChange={handleChange}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
-          </div>
-
-          <div className="relative">
-            <GraduationCap className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="text"
-              name="yearOfStudy"
-              placeholder="Year of Study (e.g., 2nd Year)"
-              value={formData.yearOfStudy}
-              onChange={handleChange}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
-          </div>
-
+          {/* Sign Up Button */}
           <button
-            type="submit"
-            className="w-full flex items-center justify-center gap-2 py-2 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition-all shadow-[0_0_10px_#22c55e]"
+            onClick={handleSignUp}
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: "#4ade80",
+              color: "#111827",
+              fontWeight: "600",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.5rem",
+              marginBottom: "1rem",
+              border: "none",
+              cursor: loading ? "not-allowed" : "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+              transition: "all 0.2s"
+            }}
           >
-            <UserPlus size={18} /> Sign Up
+            🚀 Sign Up
           </button>
-        </form>
 
-        <p className="text-center text-gray-400 mt-6">
-          Already a member?{" "}
-          <Link to="/login" className="text-green-300 hover:underline">
-            Login
-          </Link>
-        </p>
+          {/* Google Sign Up Button */}
+          <button
+            onClick={handleGoogleSignup}
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: "#1f2937",
+              color: "#fff",
+              fontWeight: "500",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.5rem",
+              border: "1px solid #4b5563",
+              cursor: loading ? "not-allowed" : "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            Sign Up with Google
+          </button>
+
+          {/* Login Link */}
+          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+            <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>
+              Already have an account?{" "}
+              <a href="/login" style={{ color: "#4ade80", fontWeight: "500", textDecoration: "none" }}>
+                Login
+              </a>
+            </p>
+          </div>
+
+          <div id="recaptcha-container"></div>
+        </div>
       </div>
     </div>
   );

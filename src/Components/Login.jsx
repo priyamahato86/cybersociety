@@ -1,89 +1,196 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+// src/Components/Login.jsx
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const Login = () => {
+  const { login, user, is2FAVerified } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, googleLogin } = useAuth();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Redirect logic based on auth and 2FA state
+  useEffect(() => {
+    if (user && !is2FAVerified) navigate("/verify-phone");
+    else if (user && is2FAVerified) navigate("/challenges");
+  }, [user, is2FAVerified, navigate]);
+
+  // Email/password login
+  const handleEmailLogin = async () => {
     try {
+      setLoading(true);
       await login(email, password);
-      navigate("/");
-    } catch (error) {
-      alert(error.message);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Google login
   const handleGoogleLogin = async () => {
     try {
-      await googleLogin();
-      navigate("/");
-    } catch (error) {
-      alert(error.message);
+      setLoading(true);
+      await signInWithPopup(auth, provider);
+      // user state updates automatically via AuthContext
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
-      <div className="bg-gray-900 rounded-2xl shadow-lg w-full max-w-md p-8 border border-green-400/30">
-        <h2 className="text-4xl font-bold text-center mb-4">
-          Welcome Back <span className="text-green-300">Hacker</span> 👾
-        </h2>
-        <p className="text-center text-gray-400 mb-8">
-          Login to access Cyber Society resources
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="relative">
-            <Mail className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
+    <div style={{
+      minHeight: "100vh",
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "1rem"
+    }}>
+      <div style={{ width: "100%", maxWidth: "28rem" }}>
+        <div style={{
+          background: "linear-gradient(to bottom right, #1f2937, #111827)",
+          borderRadius: "1rem",
+          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+          padding: "2rem",
+          border: "1px solid #374151"
+        }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+              <span style={{ color: "#fff" }}>Welcome Back </span>
+              <span style={{ color: "#4ade80" }}>Hacker</span>
+            </h1>
+            <div style={{ display: "flex", justifyContent: "center", margin: "1rem 0" }}>
+              <span style={{ fontSize: "2.5rem" }}>👾</span>
+            </div>
+            <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>
+              Login to access Cyber Society resources
+            </p>
           </div>
 
-          <div className="relative">
-            <Lock className="absolute left-3 top-3 text-green-400" size={20} />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full pl-10 pr-4 py-2 bg-transparent border border-green-500 rounded-lg focus:ring-2 focus:ring-green-400 outline-none placeholder-gray-400"
-            />
+          {/* Email Input */}
+          <div style={{ marginBottom: "1rem" }}>
+            <div style={{ position: "relative" }}>
+              <span style={{
+                position: "absolute",
+                left: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#4ade80"
+              }}>✉️</span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "#1f2937",
+                  color: "#fff",
+                  border: "1px solid #4b5563",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 0.75rem 0.75rem 3rem",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#4ade80"}
+                onBlur={(e) => e.target.style.borderColor = "#4b5563"}
+              />
+            </div>
           </div>
 
+          {/* Password Input */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ position: "relative" }}>
+              <span style={{
+                position: "absolute",
+                left: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#4ade80"
+              }}>🔒</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "#1f2937",
+                  color: "#fff",
+                  border: "1px solid #4b5563",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 0.75rem 0.75rem 3rem",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#4ade80"}
+                onBlur={(e) => e.target.style.borderColor = "#4b5563"}
+              />
+            </div>
+          </div>
+
+          {/* Login Button */}
           <button
-            type="submit"
-            className="w-full flex items-center justify-center gap-2 py-2 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition-all shadow-[0_0_10px_#22c55e]"
+            onClick={handleEmailLogin}
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: "#4ade80",
+              color: "#111827",
+              fontWeight: "600",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.5rem",
+              marginBottom: "1rem",
+              border: "none",
+              cursor: loading ? "not-allowed" : "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+              transition: "all 0.2s"
+            }}
           >
-            <LogIn size={18} /> Login
+            🚀 Login
           </button>
-        </form>
 
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full mt-4 py-2 border border-green-500 rounded-lg hover:bg-green-400/10 transition-all"
-        >
-          Login with Google
-        </button>
+          {/* Google Login Button */}
+          <button
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: "#1f2937",
+              color: "#fff",
+              fontWeight: "500",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.5rem",
+              border: "1px solid #4b5563",
+              cursor: loading ? "not-allowed" : "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            Login with Google
+          </button>
 
-        <p className="text-center text-gray-400 mt-6">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-green-300 hover:underline">
-            Sign up
-          </Link>
-        </p>
+          {/* Sign Up Link */}
+          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+            <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>
+              Don't have an account?{" "}
+              <a href="/signup" style={{ color: "#4ade80", fontWeight: "500", textDecoration: "none" }}>
+                Sign up
+              </a>
+            </p>
+          </div>
+
+          <div id="recaptcha-container"></div>
+        </div>
       </div>
     </div>
   );
