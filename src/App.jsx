@@ -1,7 +1,6 @@
 // App.jsx
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { useAuth } from "./contexts/AuthContext";
 
 import Navigation from "./Components/Navigation";
 import Home from "./Components/Home";
@@ -15,11 +14,11 @@ import Page1 from "./Components/Page1";
 import Page2 from "./Components/Page2";
 import Page3 from "./Components/Page3";
 import Page4 from "./Components/Page4";
-import Login from "./Components/Login";
-import Signup from "./Components/Signup";
-import PhoneVerification from "./Components/PhoneVerification";
-import ChallengesPage from "./Components/ChallengesPage";
-import PrivateRoute from "./Components/PrivateRoute";
+// import Login from "./Components/Login";
+// import Signup from "./Components/Signup";
+// import PhoneVerification from "./Components/PhoneVerification";
+// import ChallengesPage from "./Components/ChallengesPage";
+// import PrivateRoute from "./Components/PrivateRoute";
 
 import "./App.css";
 
@@ -42,7 +41,6 @@ function ScrollToSectionOnLoad() {
 }
 
 function App() {
-  const { user, is2FAVerified } = useAuth();
 
   return (
     <>
@@ -71,33 +69,12 @@ function App() {
         <Route path="/page2" element={<Page2 />} />
         <Route path="/page3" element={<Page3 />} />
         <Route path="/page4" element={<Page4 />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        {/* <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} /> */}
 
-        {/* Phone Verification Route */}
-        <Route
-          path="/verify-phone"
-          element={
-            user
-              ? !is2FAVerified
-                ? <PhoneVerification />
-                : <Navigate to="/challenges" replace />
-              : <Navigate to="/login" replace />
-          }
-        />
+         </Routes>
 
-        {/* Protected Challenges Route */}
-        <Route
-          path="/challenges"
-          element={
-            <PrivateRoute>
-              <ChallengesPage />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
     </>
   );
 }
-
 export default App;

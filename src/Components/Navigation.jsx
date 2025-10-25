@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import {
   HousePlus,
   Laptop,
@@ -16,7 +15,6 @@ import {
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth();
 
   const handleScrollNav = (sectionId) => {
     if (location.pathname !== "/") {
@@ -88,7 +86,7 @@ const Navigation = () => {
           </RouterLink>
 
           {/* Auth Buttons */}
-          <div className="flex items-center gap-3 mt-2 sm:mt-0">
+          {/* <div className="flex items-center gap-3 mt-2 sm:mt-0">
             {!user ? (
               <>
                 <RouterLink
@@ -115,7 +113,7 @@ const Navigation = () => {
                 <span className="hidden sm:inline">Logout</span>
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </nav>
