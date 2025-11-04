@@ -1,6 +1,5 @@
-
-import React, { useEffect, useState } from "react";
-import {db} from "../firebase.js"
+import { useEffect, useState } from "react";
+import { db } from "../firebase.js";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 const App = () => {
@@ -57,7 +56,11 @@ const App = () => {
 
     return (
       <div className="shadow-md rounded-2xl overflow-hidden w-80 m-3 border border-gray-200 flex flex-col transform transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:border-green-400">
-        <img src={image} alt={name} className="w-full h-64 object-contain" />
+        <img
+          src={image || "/logo.png"}
+          alt={name}
+          className="w-full h-64 object-contain"
+        />
         <div className="p-4 bg-white flex-1 flex flex-col justify-between">
           <div>
             <p className="text-gray-600 text-sm mb-2">
@@ -102,4 +105,3 @@ const App = () => {
 };
 
 export default App;
-
