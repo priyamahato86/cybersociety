@@ -72,9 +72,23 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
     role: "Web Admin",
   },
   {
+    name: "Aryan Jaiswal",
+    image: "/Aryan.jpg",
+    github: "https://github.com/aryan03-git",
+    linkedin: "https://www.linkedin.com/in/aryan-jaiswal-9267332a8/",
+    role: "Web Dev",
+  },
+  {
+    name: "Abhishek Dutta",
+    image: "/Abhishek.jpg",
+    github: "https://github.com/Abhishek6832",
+    linkedin: "https://www.linkedin.com/in/abhishek-dutta-37578231b/",
+    role: "Management lead",
+  },
+  {
     name: "Punit Agarwal",
-    image: "./punit.png",
-    github: "https://github.com/your-github",
+    image: "./punit.jpg",
+    github: "https://github.com/Punit025",
     linkedin: "https://www.linkedin.com/in/punit-agarwal-6a3552278?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     role: "Management",
   },
@@ -85,6 +99,8 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
     linkedin: "https://linkedin.com/in/amit-verma",
     role: "Management",
   },
+  
+  
   // Add more members here
 ];
 
