@@ -41,6 +41,46 @@ const blogs = [
     author: "Rahul Mishra",
     link: "https://rivian96.github.io/blogs/unpacking-malware/",
   },
+  {
+    title: "Reverse Engineering",
+    description:
+      "In this post, we dive deep into the fundamentals of reverse engineering. We'll walk through common binary structures, how to identify program behavior, and how to analyze code using tools and techniques across both static and dynamic approaches...",
+    date: "Aug 15, 2025",
+    readTime: "9 min",
+    words: "1002 words",
+    author: "Rahul Mishra",
+    link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Reverse-Engineering/Reverse%20Engineering_%20What%20to%20Know%20First.md",
+  },
+  {
+    title: "Process-Explorer",
+    description:
+      "In this post, we dive deep into using Process Explorer for system inspection. We'll walk through common process behaviors, how to identify suspicious activity, and how to analyze runtime details using its powerful monitoring and visualization features...",
+    date: "Dec 9, 2025",
+    readTime: "12 min",
+    words: "1110 words",
+    author: "Rahul Mishra",
+    link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Windows-Internals/Process-Explorer/Process%20Explorer.md",
+  },
+  {
+    title: "Task-Manager",
+    description:
+      "In this post, we dive deep into understanding Windows Task Manager. We'll walk through common process metrics, how to identify system bottlenecks, and how to analyze resource usage using its built-in monitoring tools...",
+    date: "Dec 9, 2025",
+    readTime: "11 min",
+    words: "1120 words",
+    author: "Rahul Mishra",
+    link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Windows-Internals/Task-manager/Task%20Manager.md",
+  },
+  {
+    title: "Threads",
+    description:
+      "In this post, we dive deep into Windows internals and explore how threads work. We'll walk through common thread operations, how to identify thread activity, and how to analyze their behavior using tools and techniques across both user-mode and kernel-mode analysis...",
+    date: "Dec 10, 2025",
+    readTime: "10 min",
+    words: "1110 words",
+    author: "Rahul Mishra",
+    link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Windows-Internals/threads/Threads.md",
+  },
 ];
 
 const Blog = () => {
@@ -65,7 +105,7 @@ const Blog = () => {
             href={blog.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative bg-gradient-to-b from-gray-900/70 to-black border border-gray-800 hover:border-green-500/60 rounded-2xl p-6 shadow-[0_0_10px_rgba(0,255,0,0.05)] hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-b from-gray-900/70 to-black border border-gray-800 hover:border-green-500/60 rounded-2xl p-6 pb-12 shadow-[0_0_10px_rgba(0,255,0,0.05)] hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] transition-all duration-300 overflow-hidden"
           >
             {/* Subtle Glow Overlay */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-green-500 blur-2xl transition-all duration-500"></div>
