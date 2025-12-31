@@ -1,0 +1,156 @@
+
+name: SAST Scanning
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+    semgrep:
+      name: Semgrep Scan
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        actions: read
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      container:
+        image: semgrep/semgrep
+      if: (github.actor != 'dependabot[bot]')
+      steps:
+        - uses: actions/checkout@v4
+        - run: |
+            semgrep ci --json > semgrep.json
+            jq '.results[] | select(.extra.severity == "ERROR")' semgrep.json && exit 1 || exit 0
+            
+
+    sonarqube:
+          name: SonarQube
+          runs-on: ubuntu-latest
+          permissions:
+            contents: read
+            actions: read
+          steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  show-progress: false
+                  
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarqube-scan-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              with:
+                args: >
+                    -Dsonar.organization=technochip
+                    -Dsonar.projectKey=Test-workflows
+                    -Dsonar.log.level=WARN
+              
+            - name: SonarCloud Quality Gate
+              uses: sonarsource/sonarqube-quality-gate-action@master
+              timeout-minutes: 5
+              env:
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+
+    create_issue:
+      name: Create / Update Security Issue
+      needs: [semgrep,sonarqube]
+      runs-on: ubuntu-latest
+      if: always()
+    
+      permissions:
+        contents: read
+        issues: write
+    
+      steps:
+        - name: Create / Update GitHub Issue
+          uses: actions/github-script@v7
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+             const core = require("@actions/core");
+
+                const owner = context.repo.owner;
+                const repo = context.repo.repo;
+                const label = "security:sast";
+                const title = "🚨 SAST Vulnerabilities Detected";
+                
+                const semgrepResult = "${{ needs.semgrep.result }}";
+                const sonarqubeResult = "${{ needs.sonarqube.result }}";
+                const hasFailures =
+                  semgrepResult === "failure" || sonarqubeResult === "failure";
+                
+                const issues = await github.rest.issues.listForRepo({
+                  owner,
+                  repo,
+                  state: "open",
+                  labels: label,
+                });
+                
+                const existingIssue = issues.data.find(i => i.title === title);
+                
+                if (!hasFailures && existingIssue) {
+                  await github.rest.issues.update({
+                    owner,
+                    repo,
+                    issue_number: existingIssue.number,
+                    state: "closed",
+                  });
+                
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: existingIssue.number,
+                    body: "✅ No SAST vulnerabilities detected. Closing issue automatically.",
+                  });
+                
+                  return;
+                }
+                
+                if (hasFailures) {
+                  const body = `
+                ### 🚨 SAST Vulnerabilities Detected
+                
+                **Workflow:** ${context.workflow}
+                **Branch:** ${context.ref}
+                **Commit:** ${context.sha}
+                
+                ### Scan Results
+                - **Semgrep:** ${semgrepResult}
+                - **SonarQube:** ${sonarqubeResult}
+                
+                🔗 https://github.com/${owner}/${repo}/actions/runs/${context.runId}
+                
+                ⛔ This issue will auto-close when vulnerabilities are fixed.
+                `;
+                
+                  if (existingIssue) {
+                    await github.rest.issues.createComment({
+                      owner,
+                      repo,
+                      issue_number: existingIssue.number,
+                      body,
+                    });
+                  } else {
+                    await github.rest.issues.create({
+                      owner,
+                      repo,
+                      title,
+                      body,
+                      labels: [label],
+                    });
+                  }
+                
+                  core.setFailed("SAST vulnerabilities detected");
+                }
+
+
