@@ -1,6 +1,6 @@
 // src/Components/Login.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";

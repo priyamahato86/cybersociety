@@ -1,5 +1,5 @@
 // App.jsx
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router";
 import { useEffect } from "react";
 
 import Navigation from "./Components/Navigation";

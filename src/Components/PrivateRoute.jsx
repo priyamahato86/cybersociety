@@ -1,6 +1,6 @@
 // PrivateRoute.jsx
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 const PrivateRoute = ({ children }) => {
   const { user, is2FAVerified } = useAuth();

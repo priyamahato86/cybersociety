@@ -1,5 +1,5 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
+import { Link as RouterLink } from "react-router";
 import {
   HousePlus,
   Laptop,
