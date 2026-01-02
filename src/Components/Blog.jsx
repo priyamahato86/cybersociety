@@ -81,6 +81,16 @@ const blogs = [
     author: "Rahul Mishra",
     link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Windows-Internals/threads/Threads.md",
   },
+  {
+    title: "Introduction to Android Security",
+    description:
+      "In this post, we dive deep into Android Security by exploring the Android architecture layer by layer, from the Linux Kernel up to system applications, with a strong focus on how security is enforced at each level. It highlights key security mechanisms, risks, and protections across components like HAL, native libraries, ART, and the application framework.",
+    date: "Jan 2, 2026",
+    readTime: "15 min",
+    words: "1420 words",
+    author: "chirag sharma",
+    link: "https://github.com/Cyber-Society-MSIT/Blogs/blob/main/Introduction%20to%20Android%20Security.pdf",
+  },
 ];
 
 const Blog = () => {
