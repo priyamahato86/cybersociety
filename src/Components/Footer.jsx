@@ -14,7 +14,7 @@ const Footer = () => {
       <p className="text-justify text-[18px] mt-5">
         We use a lot of different resources and platforms. Here they are!
       </p>
-      <div className="max-w-[1320px] mx-auto grid lg:grid-cols-6 md:grid-cols-2 gap-8 px-[20px] text-center mt-5">
+      <div className="max-w-[1320px] mx-auto grid lg:grid-cols-6 md:grid-cols-2 gap-8 px-5 text-center mt-5">
         {[
           {
             icon: <FaYoutube />,
@@ -70,7 +70,7 @@ const Footer = () => {
       <div className="w-full px-4 mt-40">
       <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-2 text-center sm:text-left  w-full">
         <p className="w-full sm:w-auto">
-          &copy; CyberSociety MSIT'2025
+          &copy; CyberSociety MSIT&apos;{new Date().getFullYear()}
         </p>
         <p className="w-full sm:w-auto">
           Made by Priya Mahato
