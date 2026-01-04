@@ -1,4 +1,3 @@
-
 name: SAST Scanning
 
 on:
@@ -9,8 +8,30 @@ on:
   pull_request:
     branches:
       - main
+      -  dev 
 
 jobs:
+
+    snyk:
+      name: Snyk Scan
+      runs-on: ubuntu-latest
+  
+      permissions:
+        security-events: write
+      # If your repository is private, also add:
+        actions: read
+        contents: read
+  
+      steps:
+        - uses: actions/checkout@master
+        - name: Run Snyk to check for vulnerabilities
+          uses: snyk/actions/node@master
+          continue-on-error: false # To make workflow fail when vuln detected
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          with:
+            command: code test
+
 
     semgrep:
       name: Semgrep Scan
@@ -18,17 +39,15 @@ jobs:
       permissions:
         contents: read
         actions: read
-      env:
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      container:
-        image: semgrep/semgrep
       if: (github.actor != 'dependabot[bot]')
       steps:
         - uses: actions/checkout@v4
-        - run: |
-            semgrep ci --json > semgrep.json
-            jq '.results[] | select(.extra.severity == "ERROR")' semgrep.json && exit 1 || exit 0
-            
+        - name: Install Semgrep
+          run: pipx install semgrep
+    
+        - name: Run Semgrep (fail on findings)
+          run: semgrep --config=auto --severity ERROR --severity WARNING .
+                
 
     sonarqube:
           name: SonarQube
@@ -45,25 +64,40 @@ jobs:
             - name: SonarCloud Scan
               uses: sonarsource/sonarqube-scan-action@master
               env:
-                  GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               with:
                 args: >
-                    -Dsonar.organization=technochip
-                    -Dsonar.projectKey=Test-workflows
+                    -Dsonar.organization=cyber-society-msit
+                    -Dsonar.projectKey=cybersociety-site
                     -Dsonar.log.level=WARN
-              
-            - name: SonarCloud Quality Gate
-              uses: sonarsource/sonarqube-quality-gate-action@master
-              timeout-minutes: 5
-              env:
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                    
+            - name: Check Sonar issues (FREE plan)
+              run: |
+                sudo apt-get install -y jq
+                
+                echo "Checking SonarCloud issues via API..."
+            
+                RESPONSE=$(curl -s \
+                  -u "${{ secrets.SONAR_TOKEN }}:" \
+                  "https://sonarcloud.io/api/issues/search?componentKeys=cybersociety-site&severities=CRITICAL,BLOCKER&resolved=false")
+            
+                COUNT=$(echo "$RESPONSE" | jq '.total')
+            
+                echo "Critical/Blocker issues found: $COUNT"
+            
+                if [ "$COUNT" -gt 0 ]; then
+                  echo "❌ SonarCloud vulnerabilities detected"
+                  exit 1
+                else
+                  echo "✅ No critical SonarCloud issues"
+                fi     
 
 
 
     create_issue:
       name: Create / Update Security Issue
-      needs: [semgrep,sonarqube]
+      needs: [snyk,semgrep,sonarqube]
       runs-on: ubuntu-latest
       if: always()
     
@@ -77,17 +111,17 @@ jobs:
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-             const core = require("@actions/core");
-
                 const owner = context.repo.owner;
                 const repo = context.repo.repo;
                 const label = "security:sast";
                 const title = "🚨 SAST Vulnerabilities Detected";
                 
+                const snykResult = "${{ needs.snyk.result }}";
                 const semgrepResult = "${{ needs.semgrep.result }}";
                 const sonarqubeResult = "${{ needs.sonarqube.result }}";
                 const hasFailures =
-                  semgrepResult === "failure" || sonarqubeResult === "failure";
+                  snykResult === "failure" || semgrepResult === "failure" || sonarqubeResult === "failure";
+                  
                 
                 const issues = await github.rest.issues.listForRepo({
                   owner,
@@ -125,6 +159,7 @@ jobs:
                 **Commit:** ${context.sha}
                 
                 ### Scan Results
+                - **Snyk:** ${snykResult}
                 - **Semgrep:** ${semgrepResult}
                 - **SonarQube:** ${sonarqubeResult}
                 
@@ -152,5 +187,3 @@ jobs:
                 
                   core.setFailed("SAST vulnerabilities detected");
                 }
-
-
