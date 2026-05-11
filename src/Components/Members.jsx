@@ -66,7 +66,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
   },
   {
     name: "Priya Mahato",
-    image: "https://avatars.githubusercontent.com/u/209283042?v=4",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQHmeFg7A8jJog/profile-displayphoto-crop_800_800/B56ZvHCXgrHMAI-/0/1768570848521?e=1779926400&v=beta&t=6OCbPSQ5UYH9OGAa2mkBk3qaXpc0a8hIguVfgOTBq7Y",
     github: "https://github.com/priyamahato86",
     linkedin: "http://www.linkedin.com/in/priyamahato86",
     role: "Web Admin",
