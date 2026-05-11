@@ -99,7 +99,69 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
     linkedin: "https://linkedin.com/in/amit-verma",
     role: "Management",
   },
-  
+  {
+    name: "Ashutosh Dwivedi",
+    image: "https://i.postimg.cc/N04jtNJy/IMG-20260511-WA0034.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Kali Mitul Talapatra",
+    image: "https://i.postimg.cc/B6R67j7d/IMG-20260412-WA0047.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "MD Atiq Niraj Rahaman",
+    image: "https://i.postimg.cc/8cb2J3v6/IMG-20260512-WA0005.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Sampurna Roy",
+    image: "https://i.postimg.cc/Qxy64hh2/IMG-20260512-WA0004.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Ashutosh Saranagi",
+    image: "https://i.postimg.cc/BbwCVBf9/IMG-20260511-WA0033.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Rudrargha Bhattacharyya",
+    image: "https://i.postimg.cc/3NDhk9BX/IMG-20260511-WA0031.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Swapnil Gangopadhyay",
+    image: "https://i.postimg.cc/bw1QxhJV/IMG-20260511-WA0030.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Rajsis Goswami",
+    image: "https://i.postimg.cc/HL2XN9b0/IMG-20260511-WA0029.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
+  {
+    name: "Ankita Pandit",
+    image: "https://i.postimg.cc/qvGGfrTN/IMG-20260512-WA0003.jpg",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com",
+    role: " Executive member",
+  },
   
   // Add more members here
 ];
